@@ -19,7 +19,7 @@ matrix:
     # tests if crates truly can be built without std
     - env: TARGET=thumbv7em-none-eabi
       rust: nightly
-      script: xargo build --no-default-features --verbose --target $TARGET
+      script: ./build_nostd.sh
       install:
         - cargo install xargo --force
         - rustup target install armv7-unknown-linux-gnueabihf

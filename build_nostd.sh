@@ -4,6 +4,7 @@
 # all crates (see https://github.com/rust-lang/cargo/issues/4753 )
 DIRS=`ls -d */`
 TARGET="thumbv7em-none-eabi"
+cargo clean
 
 for dir in $DIRS; do
     if [ $dir = "target/" ]

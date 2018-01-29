@@ -3,6 +3,9 @@
 //! # Usage
 //!
 //! ```rust
+//! # #[macro_use] extern crate hex_literal;
+//! # extern crate sha1;
+//! # fn main() {
 //! use sha1::{Sha1, Digest};
 //!
 //! // create a Sha1 object
@@ -14,10 +17,8 @@
 //! // read hash digest in the form of GenericArray which is in this case
 //! // equivalent to [u8; 20]
 //! let output = sh.result();
-//! assert_eq!(output[..], [
-//!     0x2a, 0xae, 0x6c, 0x35, 0xc9, 0x4f, 0xcf, 0xb4, 0x15, 0xdb,
-//!     0xe9, 0x5f, 0x40, 0x8b, 0x9c, 0xe9, 0x1e, 0xe8, 0x46, 0xed,
-//! ]);
+//! assert_eq!(output[..], hex!("2aae6c35c94fcfb415dbe95f408b9ce91ee846ed"));
+//! # }
 //! ```
 #![cfg_attr(not(feature = "std"), no_std)]
 extern crate block_buffer;

@@ -19,6 +19,7 @@ sha2-asm = { version="0.3", optional = true }
 
 [dev-dependencies]
 digest = { version = "0.8", features = ["dev"] }
+hex-literal = { version = "0.1" }
 
 [features]
 default = ["std"]

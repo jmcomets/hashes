@@ -151,7 +151,7 @@ mod tests {
 
     fn tiger_hash(input: &[u8]) -> Output {
         let mut hasher = Tiger::new();
-        hasher.input(&input);
+        Input::input(&mut hasher, input);
         hasher.result()
     }
 

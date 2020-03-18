@@ -19,7 +19,7 @@ use digest::generic_array::typenum::{U24, U64};
 use byte_tools::{read_u64v_le, write_u64v_le};
 
 use block_buffer::BlockBuffer;
-use block_buffer::byteorder::BE;
+use block_buffer::byteorder::LE;
 
 #[macro_use]
 mod macros;
@@ -85,7 +85,7 @@ impl Tiger {
 
     fn finalize(&mut self) {
         let self_state = &mut self.state;
-        self.buffer.len64_padding::<BE, _>(self.len, |blk| self_state.process_block(blk));
+        self.buffer.len64_padding::<LE, _>(self.len, |blk| self_state.process_block(blk));
     }
 }
 
@@ -158,14 +158,14 @@ mod tests {
     #[test]
     fn basic_test() {
         let test_cases: &'static [(&'static [u8], &'static str)] = &[
-            (b"",                                                                                 "3293ac630c13f0245f92bbb1766e16167a4e58492dde73f3"),
-            (b"a",                                                                                "77befbef2e7ef8ab2ec8f93bf587a7fc613e247f5f247809"),
-            (b"abc",                                                                              "2aab1484e8c158f2bfb8c5ff41b57a525129131c957b5f93"),
-            (b"message digest",                                                                   "d981f8cb78201a950dcf3048751e441c517fca1aa55a29f6"),
-            (b"abcdefghijklmnopqrstuvwxyz",                                                       "1714a472eee57d30040412bfcc55032a0b11602ff37beee9"),
-            (b"abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq",                         "0f7bf9a19b9c58f2b7610df7e84f0ac3a71c631e7b53f78e"),
-            (b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",                   "8dcea680a17583ee502ba38a3c368651890ffbccdc49a8cc"),
-            (b"12345678901234567890123456789012345678901234567890123456789012345678901234567890", "1c14795529fd9f207a958f84c52f11e887fa0cabdfd91bfd"),
+            (b"",                                                                                 "4441BE75F6018773C206C22745374B924AA8313FEF919F41"),
+            (b"a",                                                                                "67E6AE8E9E968999F70A23E72AEAA9251CBC7C78A7916636"),
+            (b"abc",                                                                              "F68D7BC5AF4B43A06E048D7829560D4A9415658BB0B1F3BF"),
+            (b"message digest",                                                                   "E29419A1B5FA259DE8005E7DE75078EA81A542EF2552462D"),
+            (b"abcdefghijklmnopqrstuvwxyz",                                                       "F5B6B6A78C405C8547E91CD8624CB8BE83FC804A474488FD"),
+            (b"abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq",                         "A6737F3997E8FBB63D20D2DF88F86376B5FE2D5CE36646A9"),
+            (b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",                   "EA9AB6228CEE7B51B77544FCA6066C8CBB5BBAE6319505CD"),
+            (b"12345678901234567890123456789012345678901234567890123456789012345678901234567890", "D85278115329EBAA0EEC85ECDC5396FDA8AA3A5820942FFF"),
         ];
 
         for (i, &(input, expected_hex)) in test_cases.iter().enumerate() {

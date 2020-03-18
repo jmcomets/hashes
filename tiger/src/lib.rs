@@ -53,7 +53,7 @@ impl TigerState {
         let (a, b, c) = self.0;
         let (mut a, mut b, mut c) = (Wrapping(a), Wrapping(b), Wrapping(c));
 
-        let mut data: [u64; 8] = unsafe { mem::uninitialized() };
+        let mut data: [u64; 8] = [0; 8];
         read_u64v_le(&mut data, block);
 
         let mut data = unsafe { mem::transmute::<_, [Wrapping<u64>; 8]>(data) };
@@ -117,7 +117,7 @@ impl FixedOutput for Tiger {
 
         let (a, b, c) = self.state.get();
 
-        let mut output: Output = unsafe { mem::uninitialized() };
+        let mut output = Output::default();
         write_u64v_le(output.as_mut_slice(), &[a, b, c]);
 
         output

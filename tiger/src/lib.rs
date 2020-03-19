@@ -7,6 +7,8 @@
 #[macro_use] extern crate digest;
 extern crate block_buffer;
 extern crate byte_tools;
+#[cfg(feature = "std")]
+extern crate std;
 
 use core::mem;
 use core::num::Wrapping;
@@ -134,45 +136,3 @@ impl Reset for Tiger {
 
 impl_opaque_debug!(Tiger);
 impl_write!(Tiger);
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    use core::num::ParseIntError;
-
-    fn hex_to_bytes(hex: &str) -> Result<Output, ParseIntError> {
-        let mut bytes = [0; 24];
-        for i in 0..hex.len()/2 {
-            bytes[i] = u8::from_str_radix(&hex[2*i..2*i+2], 16)?;
-        }
-        Ok(bytes.into())
-    }
-
-    fn tiger_hash(input: &[u8]) -> Output {
-        let mut hasher = Tiger::new();
-        Input::input(&mut hasher, input);
-        hasher.result()
-    }
-
-    #[test]
-    fn basic_test() {
-        let test_cases: &'static [(&'static [u8], &'static str)] = &[
-            (b"",                                                                                 "4441BE75F6018773C206C22745374B924AA8313FEF919F41"),
-            (b"a",                                                                                "67E6AE8E9E968999F70A23E72AEAA9251CBC7C78A7916636"),
-            (b"abc",                                                                              "F68D7BC5AF4B43A06E048D7829560D4A9415658BB0B1F3BF"),
-            (b"message digest",                                                                   "E29419A1B5FA259DE8005E7DE75078EA81A542EF2552462D"),
-            (b"abcdefghijklmnopqrstuvwxyz",                                                       "F5B6B6A78C405C8547E91CD8624CB8BE83FC804A474488FD"),
-            (b"abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq",                         "A6737F3997E8FBB63D20D2DF88F86376B5FE2D5CE36646A9"),
-            (b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",                   "EA9AB6228CEE7B51B77544FCA6066C8CBB5BBAE6319505CD"),
-            (b"12345678901234567890123456789012345678901234567890123456789012345678901234567890", "D85278115329EBAA0EEC85ECDC5396FDA8AA3A5820942FFF"),
-        ];
-
-        for (i, &(input, expected_hex)) in test_cases.iter().enumerate() {
-            let expected = hex_to_bytes(expected_hex).unwrap();
-            let reached = tiger_hash(input);
-
-            assert_eq!((i, &expected), (i, &reached));
-        }
-    }
-}

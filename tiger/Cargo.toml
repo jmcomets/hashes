@@ -14,8 +14,13 @@ block-buffer = "0.7"
 byte-tools = "0.2"
 opaque-debug = "0.2"
 
-# [dev-dependencies]
-# digest = { version = "0.8", features = ["dev"] }
+[dev-dependencies]
+digest = { version = "0.8", features = ["dev"] }
+hex-literal = "0.1"
+
+[features]
+default = ["std"]
+std = ["digest/std"]
 
 [badges]
 travis-ci = { repository = "RustCrypto/hashes" }

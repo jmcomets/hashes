@@ -4,4 +4,4 @@
 extern crate digest;
 extern crate tiger;
 
-bench_digest!(tiger::Tiger);
+bench!(tiger::Tiger);
